@@ -1,0 +1,10 @@
+{
+  "event_id": "attendance-event-001",
+  "shard_id": "synthetic-shard-000",
+  "sequence_number": "10001",
+  "partition_key": "session-demo-01",
+  "payload": {
+    "session_id": "session-demo-01",
+    "attendance_count": 12
+  }
+}
