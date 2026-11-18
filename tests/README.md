@@ -1,12 +1,19 @@
-# Behavior test plan
+# Verification plan
 
-No implementation tests exist yet. Foundation checks do not count as behavior tests.
+Runtime behavior tests will be added with the implementation. The current source integrity check does not provide runtime coverage.
 
-Build meaningful tests as each behavior is implemented:
-1. Domain tests for invariants and explicit error results.
-2. Adapter contract tests, including malformed and unauthorized inputs.
-3. Integration tests against actual chosen dependencies, isolated from production.
-4. Relevant concurrency, retry, crash/restart and recovery tests.
-5. One reproducible end-to-end acceptance scenario.
+## Required behavior coverage
+- All accepted event IDs reach the destination eventually in the measured recovery test; duplicates are counted.
+- Memory stays bounded during a destination outage.
+- A checkpoint cannot silently skip an unacknowledged record.
+- Recovery report separates simulator findings from actual cloud findings.
 
-Use `docs/failure-lab.md` and `docs/acceptance.md` for project-specific cases. A mock cannot establish real service ordering, consistency, replication or durability guarantees. Label simulator coverage and real-dependency coverage separately.
+## Failure coverage
+- Stop Kafka long enough to exhaust the normal retry budget.
+- Crash the bridge after Kafka acknowledgement but before checkpointing.
+- Inject a malformed record between valid records.
+- Split a source shard during sustained traffic.
+
+Add domain tests, adapter contract tests and integration tests as those components are implemented. Include relevant invalid input, unauthorized access, concurrency, retry and restart scenarios. Real dependency guarantees require real integration evidence; mocks alone cannot establish ordering, replication, consistency or durability.
+
+See [reliability](../docs/reliability.md) for execution/reporting requirements.
